@@ -26,36 +26,73 @@ document.addEventListener("DOMContentLoaded", () => {
     const questions = [
       {q: "তুমি জানো কী, তুমি ছাড়া আমার সকাল শুরু হয় না?", o: ["হ্যাঁ, আমি জানি ❤️", "হয়তো না 🥺"]},
       {q: "আমরা একসাথে কফি খেতে গেলে কে বেশি কথা বলবে?", o: ["আমি! 😄", "তুমি! 😘"]},
-      {q: "যখন তুমি আমাকে দেখো, তুমি কী অনুভব করো?", o: ["তোমার চোখে হাসি ফুটে উঠে😊" , "মনে হয় সব ঠিক আছে, আমি নিরাপদ 💖"]},
+      {q: "যখন তুমি আমাকে দেখো, তুমি কী অনুভব করো?", o: ["তোমার চোখে হাসি ফুটে উঠে😊", "মনে হয় সব ঠিক আছে, আমি নিরাপদ 💖"]},
       {q: "যদি আমি বলি, “চলো চাঁদে যাই”, তুমি যাবে?", o: ["হ্যাঁ, তোমার সাথে যেকোনো জায়গায় 🌙", "না, তুমি আছো বলেই পৃথিবী সুন্দর 🌎"]},
-      {q: "আমাদের গল্প কখনো শেষ হবে?", o: ["না,আমাদের ভালোবাসা অটুট 💪💞", "যতদিন তুমি পাশে আছো 💖"]}
+
+      // tricky confirmation question
+      {q: "আপনি কি সত্যিই আমার কাছে যেতে চান?", o: ["হ্যাঁ, আমি যেতে চাই!", "না, একটু পরে আসবো"]},
+
+      // extra romantic question after YES
+      {q: "তুমি কেমন করে আমার ভালবাসা অনুভব করো?", o: ["তোমার কথা ভাবলে হৃদয় গরম হয় ❤️", "তুমি পাশে থাকলে সব ভালো লাগে 😊"]}
     ];
+
     let index = 0;
 
-    const showQuestion = () => {
+    function showQuestion() {
       quizDiv.innerHTML = "";
-      if (index < questions.length) {
+      if(index < questions.length) {
         const div = document.createElement("div");
         div.className = "quiz-question";
-        div.innerHTML = `<h3>${questions[index].q}</h3>
+        div.innerHTML = `
+          <h3>${questions[index].q}</h3>
           <div class="quiz-options">
             <button>${questions[index].o[0]}</button>
             <button>${questions[index].o[1]}</button>
-          </div>`;
+          </div>
+        `;
         quizDiv.appendChild(div);
 
         div.querySelectorAll("button").forEach(btn => {
           btn.addEventListener("click", () => {
-            index++;
-            showQuestion();
+            if(index === questions.length - 2) {
+              // tricky confirmation question (second last)
+              if(btn.textContent === questions[index].o[0]) {
+                index++; // move to extra romantic question
+                showQuestion();
+              } else {
+                showFinalMessage(false);
+              }
+            } else if(index === questions.length - 1) {
+              // extra romantic question (last)
+              showFinalMessage(true);
+            } else {
+              index++;
+              showQuestion();
+            }
           });
         });
+      }
+    }
+
+    function showFinalMessage(isYes) {
+      quizDiv.innerHTML = "";
+      if(isYes) {
+        quizDiv.innerHTML = `
+          <h3>এখন আপনি চলে যান আয়ানের কাছে 💖</h3>
+          <button onclick="window.location.href='https://www.facebook.com/mdayan15'">চলো!</button>
+        `;
       } else {
         quizDiv.innerHTML = `
-          <h3>তবে চলে আসো এবার আমার কাছে 💖</h3>
-          <button onclick="window.location.href='https://https://www.facebook.com/mdayan15'">চলো!</button>`;
+          <h3>আচ্ছা, যখন মন করবে তখন আসো, আয়ান অপেক্ষা করবে 🥰</h3>
+          <button id="retryBtn">আবার চেষ্টা করো</button>
+        `;
+        document.getElementById("retryBtn").addEventListener("click", () => {
+          index = questions.length - 2; // tricky confirmation question থেকে শুরু
+          showQuestion();
+        });
       }
-    };
+    }
+
     showQuestion();
   }
 });
@@ -65,13 +102,13 @@ const canvas = document.getElementById("heartCanvas");
 const ctx = canvas.getContext("2d");
 let hearts = [];
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-window.addEventListener("resize", () => {
+function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-});
+}
+resizeCanvas();
+
+window.addEventListener("resize", resizeCanvas);
 
 document.addEventListener("mousemove", e => {
   for (let i = 0; i < 2; i++) {
