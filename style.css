@@ -1,0 +1,84 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom right, #ffe6e6, #ffcccc);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.container, .question-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+}
+
+h1, h2 {
+  color: #cc0052;
+}
+
+p {
+  color: #99004d;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #ff4d88;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff66a3;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255,77,136,0.5);
+}
+
+#musicToggle {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  z-index: 999;
+}
+
+canvas#heartCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.quiz-question {
+  margin: 20px;
+  animation: fadeIn 1s ease;
+}
+
+.quiz-options button {
+  margin: 10px;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  h1, h2 {
+    font-size: 1.5rem;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+}
